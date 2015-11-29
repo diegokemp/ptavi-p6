@@ -45,7 +45,7 @@ i = 0
 while i < 1:
     data = my_socket.recv(1024)
     respuesta = data.decode('utf-8')
-    #print('Recibido -- ' + respuesta)
+    print('Recibido -- ' + respuesta)
     serv_resp = respuesta.split(" ")
     #print(serv_resp)
     if serv_resp[1] == "200":
@@ -58,10 +58,15 @@ while i < 1:
         i = 2
     elif serv_resp[1] == "100":
         print("100 Trying")
+        findok = respuesta.split("\r\n\r\n")
+        print(findok)
+        okmsg = findok[2].split(" ")
+        if okmsg[2] == "OK":
+            ack = "ACK sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n"
+            my_socket.send(bytes(ack, 'utf-8') + b'\r\n')
+            print("enviado el ack")
     elif serv_resp[1] == "180":
         print("180 Ring")
-    else:
-        print(respuesta)
 #print("Terminando socket...")
 # Cerramos todo
 my_socket.close()
