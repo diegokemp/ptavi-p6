@@ -24,7 +24,7 @@ try:
     PUERTO = resto[1]
 except:
     print("Usage: python3 client.py method receiver@IP:SIPport")
-print(METODO + LOGIN + IP + PUERTO)
+#print(METODO + LOGIN + IP + PUERTO)
 #login = separador.split(" ")[1]
 
 #SERVER = 'localhost'
@@ -39,19 +39,29 @@ my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 my_socket.connect((IP, int(PUERTO)))
 
-print("Enviando: " + LINE)
+#print("Enviando: " + LINE)
 my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
-
-data = my_socket.recv(1024)
-respuesta = data.decode('utf-8')
-print('Recibido -- ' + respuesta)
-serv_resp = respuesta.split(" ")
-print(serv_resp)
-if serv_resp[1] == "200":
-    print("recv 200 ok")
-    ack = "ACK sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n"
-    my_socket.send(bytes(ack, 'utf-8') + b'\r\n')
-    print("enviado el ack")
+i = 0
+while i < 1:
+    data = my_socket.recv(1024)
+    respuesta = data.decode('utf-8')
+    #print('Recibido -- ' + respuesta)
+    serv_resp = respuesta.split(" ")
+    #print(serv_resp)
+    if serv_resp[1] == "200":
+        print("recv 200 ok")
+        ack = "ACK sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n"
+        my_socket.send(bytes(ack, 'utf-8') + b'\r\n')
+        print("enviado el ack")
+    elif serv_resp[1] == "405":
+        print("error 405")
+        i = 2
+    elif serv_resp[1] == "100":
+        print("100 Trying")
+    elif serv_resp[1] == "180":
+        print("180 Ring")
+    else:
+        print(respuesta)
 #print("Terminando socket...")
 # Cerramos todo
 my_socket.close()
