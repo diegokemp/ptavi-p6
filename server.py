@@ -25,8 +25,8 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             metodos = ["INVITE","BYE","ACK"]
             if lineutf[0] in metodos:
                 if lineutf[0]=="INVITE":
-                    #self.wfile.write(b"SIP/2.0 100 Trying\r\n\r\n")
-                    #self.wfile.write(b"SIP/2.0 180 Ring\r\n\r\n")
+                    self.wfile.write(b"SIP/2.0 100 Trying\r\n\r\n")
+                    self.wfile.write(b"SIP/2.0 180 Ring\r\n\r\n")
                     self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
                 elif lineutf[0]=="ACK":
                     print("enviando cancion")
