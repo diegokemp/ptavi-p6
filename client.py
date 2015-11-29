@@ -41,11 +41,18 @@ my_socket.connect((IP, int(PUERTO)))
 
 print("Enviando: " + LINE)
 my_socket.send(bytes(LINE, 'utf-8') + b'\r\n')
+
 data = my_socket.recv(1024)
-
-print('Recibido -- ', data.decode('utf-8'))
+respuesta = data.decode('utf-8')
+print('Recibido -- ' + respuesta)
+serv_resp = respuesta.split(" ")
+print(serv_resp)
+if serv_resp[1] == "200":
+    print("recv 200 ok")
+    ack = "ACK sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n"
+    my_socket.send(bytes(ack, 'utf-8') + b'\r\n')
+    print("enviado el ack")
 #print("Terminando socket...")
-
 # Cerramos todo
 my_socket.close()
 print("Fin.")
