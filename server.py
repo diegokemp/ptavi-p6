@@ -21,20 +21,16 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             line = self.rfile.read()
             lineutf = line.decode('utf-8')
             lineutf = lineutf.split(" sip:")
-            print(lineutf)
+            #print(lineutf)
             metodos = ["INVITE","BYE","ACK"]
             if lineutf[0] in metodos:
                 if lineutf[0]=="INVITE":
-                    #self.wfile.write(b"SIP/2.0 100 Trying\r\n")
-                    #self.wfile.write(b"SIP/2.0 180 Ring\r\n")
-                    self.wfile.write(b"SIP/2.0 200 OK\r\n")
+                    #self.wfile.write(b"SIP/2.0 100 Trying\r\n\r\n")
+                    #self.wfile.write(b"SIP/2.0 180 Ring\r\n\r\n")
+                    self.wfile.write(b"SIP/2.0 200 OK\r\n\r\n")
                 elif lineutf[0]=="ACK":
                     print("enviando cancion")
                     self.wfile.write(b"CANCION INCOMING")
-            else:
-                print("mal asunto")
-                #self.wfile.write(b"SIP/2.0 405 Method Not Allowed\r\n")
-
             # Si no hay más líneas salimos del bucle infinito
             if not line:
                 break
