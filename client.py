@@ -18,7 +18,7 @@ try:
 except:
     print("Usage: python3 client.py method receiver@IP:SIPport")
 
-LINE = ("INVITE sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n")
+LINE = (METODO + " sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n")
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -30,26 +30,30 @@ i = 0
 while i < 1:
     data = my_socket.recv(1024)
     respuesta = data.decode('utf-8')
+    #print(respuesta)
+    if respuesta != "":
     #print('Recibido -- ' + respuesta)
-    serv_resp = respuesta.split(" ")
+        serv_resp = respuesta.split(" ")
     #print(serv_resp)
-    if serv_resp[1] == "200":
-        print("cerrando cliente")#hemos enviado BYE, responde OK
+        if serv_resp[1] == "200":
+            print("cerrando cliente")#hemos enviado BYE, responde OK
+            i = 2
+        elif serv_resp[1] == "405":
+            print(respuesta)
+            i = 2
+        elif serv_resp[1] == "100":#trying
+            print(respuesta)
+            findok = respuesta.split("\r\n\r\n")
+            #print(findok)
+            okmsg = findok[2].split(" ")
+            if okmsg[2] == "OK":#3 mns concatenados Trying;Ring;OK
+                ack = "ACK sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n"
+                my_socket.send(bytes(ack, 'utf-8') + b'\r\n')
+                print("enviado el ack")
+        elif serv_resp[1] == "180":#No deberia pasar por aqui
+            print(respuesta)
+    else:
         i = 2
-    elif serv_resp[1] == "405":
-        print(respuesta)
-        i = 2
-    elif serv_resp[1] == "100":#trying
-        print(respuesta)
-        findok = respuesta.split("\r\n\r\n")
-        print(findok)
-        okmsg = findok[2].split(" ")
-        if okmsg[2] == "OK":#3 mns concatenados Trying;Ring;OK
-            ack = "ACK sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n"
-            my_socket.send(bytes(ack, 'utf-8') + b'\r\n')
-            print("enviado el ack")
-    elif serv_resp[1] == "180":#No deberia pasar por aqui
-        print(respuesta)
 #print("Terminando socket...")
 # Cerramos todo
 my_socket.close()
