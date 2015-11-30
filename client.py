@@ -36,21 +36,21 @@ while i < 1:
         serv_resp = respuesta.split(" ")
     #print(serv_resp)
         if serv_resp[1] == "200":
-            print("cerrando cliente")#hemos enviado BYE, responde OK
+            print("cerrando cliente")
             i = 2
         elif serv_resp[1] == "405":
             print(respuesta)
             i = 2
-        elif serv_resp[1] == "100":#trying
+        elif serv_resp[1] == "100":
             print(respuesta)
             findok = respuesta.split("\r\n\r\n")
             #print(findok)
             okmsg = findok[2].split(" ")
-            if okmsg[2] == "OK":#3 mns concatenados Trying;Ring;OK
+            if okmsg[2] == "OK":
                 ack = "ACK sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n"
                 my_socket.send(bytes(ack, 'utf-8') + b'\r\n')
                 print(">Descargando...")
-        elif serv_resp[1] == "180":#No deberia pasar por aqui
+        elif serv_resp[1] == "180":
             print(respuesta)
     else:
         i = 2
