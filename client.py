@@ -49,7 +49,7 @@ while i < 1:
             if okmsg[2] == "OK":#3 mns concatenados Trying;Ring;OK
                 ack = "ACK sip:" + LOGIN + "@" + IP + " SIP/2.0\r\n"
                 my_socket.send(bytes(ack, 'utf-8') + b'\r\n')
-                print("enviado el ack")
+                print(">Descargando...")
         elif serv_resp[1] == "180":#No deberia pasar por aqui
             print(respuesta)
     else:
@@ -57,4 +57,4 @@ while i < 1:
 #print("Terminando socket...")
 # Cerramos todo
 my_socket.close()
-print("Fin.")
+print(">Finalizado")
